@@ -1,12 +1,12 @@
-SW CARD VAULT v3
-Upload these files to the ROOT of the existing GitHub repository, replacing files with the same names.
-GitHub Pages URL remains the same.
+SW CARD VAULT v4 DATA PASS
+Upload all files to the root of the existing GitHub repository and replace same-named files.
 
-IMPORTANT DATA NOTE:
-The app contains all 902 numbered base-card slots:
-1977 Topps Star Wars 330
-1980 Topps Empire Strikes Back 352
-1983 Topps Return of the Jedi 220
+Changes:
+- Still 902 original-trilogy base-card slots.
+- Expanded/corrected verified 1977 Topps titles from published checklist data.
+- Added 1977 * / ** copyright variation note.
+- Added fresh PriceCharting sold-market estimates for a first batch of cards surfaced during research.
+- Missing market values remain blank rather than guessed.
+- Value source/update metadata is stored per researched card.
 
-Checklist titles are populated where verified from published checklists. Remaining titles say 'title pending verification'.
-Market values are intentionally blank unless researched; the app never fabricates missing prices.
+This is an accuracy-first database pass; additional values can be added in later passes.
