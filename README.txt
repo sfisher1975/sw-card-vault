@@ -1,16 +1,15 @@
-SW Card Vault v10
+SW Card Vault v11 — Expanded verified pricing pass
 
-Upload ALL files to the ROOT of the existing GitHub repository.
+Upload all files to the root of the existing GitHub repository.
 
-Changes:
-- PSA 10 removed from the shipped card database and UI/history grade choices.
-- Highest tracked grade is PSA 9.
-- Card detail remains simplified: Own it, Wishlist, Grade, Quantity.
-- Price History remains lightweight and loads on card selection.
+- PSA 10 remains removed.
 - Whole-dollar display remains.
-- New cards-v10.json and v10 cache avoid stale updates.
+- 902-card database remains.
+- 1977 pricing coverage expanded using current PriceCharting checklist/card-page data.
+- 72 1977 records now carry pricing refreshed/verified on 2026-09-20.
+- Missing grades remain blank instead of guessed.
+- Price history remains on card detail.
+- New cards-v11.json + v11 service worker prevent stale-cache issues.
 
-Pricing database note:
-This build preserves only price records already researched/verified in the prior app.
-It does NOT fabricate missing values. The app remains ready for the complete
-Raw / PSA 7 / PSA 8 / PSA 9 pricing dataset as those records are verified.
+Important: this is a materially larger verified pricing pass, but it is not falsely labeled
+as all 902 cards fully priced. Some cards/grades have no current reliable market value.
