@@ -1,13 +1,14 @@
-SW Card Vault v8 — Price History test
+SW Card Vault v9 — Clean card screen
 
-Upload ALL files to repo root.
+Upload ALL files to the ROOT of the existing GitHub repository.
 
-New:
-- Tap a card to see a lightweight Price History section.
-- Raw / PSA 7 / PSA 8 / PSA 9 / PSA 10 selectors.
-- Dated completed-sales graph plus sale list.
-- History is only rendered after a card is opened, so it does not slow the search screen.
-- First real-history test is 1977 Topps #1 Luke Skywalker.
-- Raw, PSA 7 and PSA 8 have dated sales loaded from PriceCharting.
-- PSA 9 / PSA 10 remain empty until dated sales are loaded; no fake history is generated.
-- Whole-dollar display retained.
+Changes:
+- Removed Price Paid from card entry.
+- Removed Notes from card entry.
+- Kept Own it, Wishlist, Grade, and Quantity.
+- Kept current Raw / PSA values.
+- Kept Price History and dated completed-sales list.
+- Kept whole-dollar price display.
+- Uses cards-v9.json and a new v9 service-worker cache to prevent stale updates.
+
+Existing saved collection data is not intentionally deleted.
