@@ -1,9 +1,16 @@
-SW Card Vault v12
+SW Card Vault v17 — DATA LOAD FIX
 
-NEW:
-- PriceCharting link added to every one of the 902 card records.
-- Card detail screen includes a "View on PriceCharting ↗" button.
-- Verified exact product pages are used where available.
-- Remaining cards use card-specific PriceCharting searches until their exact product page is verified during the database pass.
-- PSA 10 remains removed. Highest tracked grade is PSA 9.
-- New cards-v12.json and v12 service-worker cache.
+The screenshot from v16 showed all prices as dashes.
+
+Cause:
+v16 loaded cards-v16.json only. Pricing had been moved into prices-v16.json,
+but the app's boot function never loaded/merged that second file.
+
+v17 fixes this:
+- loads cards-v17.json
+- loads prices-v17.json
+- merges Raw / PSA 7 / PSA 8 / PSA 9 before rendering
+- new cache version forces a clean update
+- your local collection storage remains unchanged
+
+Upload ALL v17 files to the repository root.
