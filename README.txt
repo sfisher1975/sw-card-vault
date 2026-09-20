@@ -1,12 +1,14 @@
-SW CARD VAULT v4 DATA PASS
-Upload all files to the root of the existing GitHub repository and replace same-named files.
+SW Card Vault v5 — Card #1 pricing test
 
-Changes:
-- Still 902 original-trilogy base-card slots.
-- Expanded/corrected verified 1977 Topps titles from published checklist data.
-- Added 1977 * / ** copyright variation note.
-- Added fresh PriceCharting sold-market estimates for a first batch of cards surfaced during research.
-- Missing market values remain blank rather than guessed.
-- Value source/update metadata is stored per researched card.
+Upload ALL files in this ZIP to the ROOT of your existing sw-card-vault GitHub repository and replace the old files.
 
-This is an accuracy-first database pass; additional values can be added in later passes.
+Test card:
+1977 Topps Star Wars #1 Luke Skywalker
+Raw $199.48
+Grade 7 $2,083.81
+Grade 8 $5,063.19
+Grade 9 $9,335.45
+PSA 10 $135,416.50
+
+Source: PriceCharting live page checked 2026-09-20.
+The service-worker cache name was changed to force the phone to pick up this update.
