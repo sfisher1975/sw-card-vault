@@ -1,15 +1,9 @@
-SW Card Vault v11 — Expanded verified pricing pass
+SW Card Vault v12
 
-Upload all files to the root of the existing GitHub repository.
-
-- PSA 10 remains removed.
-- Whole-dollar display remains.
-- 902-card database remains.
-- 1977 pricing coverage expanded using current PriceCharting checklist/card-page data.
-- 72 1977 records now carry pricing refreshed/verified on 2026-09-20.
-- Missing grades remain blank instead of guessed.
-- Price history remains on card detail.
-- New cards-v11.json + v11 service worker prevent stale-cache issues.
-
-Important: this is a materially larger verified pricing pass, but it is not falsely labeled
-as all 902 cards fully priced. Some cards/grades have no current reliable market value.
+NEW:
+- PriceCharting link added to every one of the 902 card records.
+- Card detail screen includes a "View on PriceCharting ↗" button.
+- Verified exact product pages are used where available.
+- Remaining cards use card-specific PriceCharting searches until their exact product page is verified during the database pass.
+- PSA 10 remains removed. Highest tracked grade is PSA 9.
+- New cards-v12.json and v12 service-worker cache.
