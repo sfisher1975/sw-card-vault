@@ -1,59 +1,42 @@
 <!doctype html><html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<meta name="theme-color" content="#0b0d12"><meta name="mobile-web-app-capable" content="yes">
-<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png">
-<title>SW Card Vault</title>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0a0c11"><meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><title>SW Card Vault</title>
 <style>
-:root{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color-scheme:dark;--bg:#090b10;--panel:#141821;--line:#2b303b;--muted:#9ca3af;--gold:#e7c94b}
-*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f5f5f5;padding-bottom:82px}
-header{padding:20px 16px 14px;background:#10131a;border-bottom:1px solid var(--line)}
-h1{font-size:23px;margin:0}.sub{font-size:12px;color:var(--muted);margin-top:4px}
-main{max-width:760px;margin:auto;padding:14px}
-.hero{padding:15px;border:1px solid #4a4320;border-radius:16px;background:#17170f;margin-bottom:12px}
-.hero b{color:var(--gold)}
-input,select,button{font:inherit;color:#fff;background:#171b24;border:1px solid #363c49;border-radius:12px;padding:12px}
-input{width:100%;font-size:16px}.row{display:flex;gap:8px;margin-top:8px}.row>*{flex:1;min-width:0}
-.card{padding:14px;border:1px solid var(--line);background:var(--panel);border-radius:16px;margin:10px 0}
-.card.owned{border-color:var(--gold)}.top{display:flex;justify-content:space-between;gap:12px}
-.num{font-weight:900;font-size:19px}.name{font-weight:700}.meta,.small{font-size:12px;color:var(--muted)}
-.pill{height:max-content;border:1px solid #454c5a;border-radius:99px;padding:5px 8px;font-size:11px}
-.values{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:12px}
-.val{background:#0d1016;padding:9px;border-radius:11px}.lab{font-size:10px;color:var(--muted)}.money{font-size:17px;font-weight:850}
-.actions{display:flex;gap:8px;margin-top:10px}.actions button{flex:1}
-#count{font-size:12px;color:var(--muted);margin:12px 2px}
-.page{display:none}.page.active{display:block}
-.statgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.stat{padding:15px;background:var(--panel);border:1px solid var(--line);border-radius:15px}.stat strong{font-size:24px;display:block}
-nav{position:fixed;bottom:0;left:0;right:0;height:72px;background:#10131af5;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding-bottom:env(safe-area-inset-bottom)}
-nav button{border:0;background:transparent;border-radius:0;font-size:11px;padding:8px 2px;color:#aeb4c0}nav button.active{color:var(--gold)}
-.ico{display:block;font-size:22px;margin-bottom:2px}
-.notice{font-size:12px;color:var(--muted);line-height:1.45;margin-top:14px}
-</style></head><body>
-<header><h1>SW Card Vault</h1><div class="sub">Vintage Star Wars values & collection</div></header>
-<main>
-<section id="searchPage" class="page active">
-<div class="hero"><b>1977 Topps</b><div class="small">Search by card number, title or character.</div></div>
-<input id="q" inputmode="search" placeholder="Search #57, Luke, Vader…">
-<div class="row"><select id="series"><option value="">All series</option><option value="1">Series 1</option><option value="2">Series 2</option><option value="3">Series 3</option><option value="4">Series 4</option><option value="5">Series 5</option></select>
-<select id="sort"><option value="number">Card #</option><option value="psa9">PSA 9 high→low</option><option value="raw">Raw high→low</option></select></div>
-<div id="count"></div><div id="cards"></div>
-</section>
-<section id="collectionPage" class="page"><h2>My Collection</h2><div id="collectionStats" class="statgrid"></div><div id="ownedCards"></div></section>
-<section id="dealPage" class="page"><h2>Deal Checker</h2><div class="card"><div class="small">Seller's asking price</div><input id="ask" type="number" inputmode="decimal" placeholder="$ amount"><div class="small" style="margin-top:12px">Select a card</div><select id="dealCard" style="width:100%"></select><div id="dealResult"></div></div></section>
-<section id="aboutPage" class="page"><h2>About</h2><div class="card">SW Card Vault is installed as a PWA and designed for Android Chrome.<div class="notice">Market values are estimates and change over time. Verify recent sold comps before purchasing or submitting cards for grading.</div></div></section>
+:root{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color-scheme:dark;--bg:#090b10;--p:#141821;--line:#2c313d;--mut:#9ca3af;--gold:#e5c84b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:#f5f5f5;padding-bottom:80px}header{position:sticky;top:0;z-index:3;background:#10131af5;border-bottom:1px solid var(--line);padding:15px 14px}h1{margin:0;font-size:22px}main{padding:13px;max-width:800px;margin:auto}
+input,select,textarea,button{font:inherit;color:#fff;background:#171b24;border:1px solid #363c49;border-radius:11px;padding:11px}input,textarea{width:100%}textarea{min-height:70px}.row{display:flex;gap:7px;margin:8px 0}.row>*{flex:1;min-width:0}.page{display:none}.page.on{display:block}
+.card{background:var(--p);border:1px solid var(--line);border-radius:15px;padding:13px;margin:9px 0}.owned{border-color:var(--gold)}.top{display:flex;justify-content:space-between;gap:10px}.num{font-size:18px;font-weight:900}.name{font-weight:700}.meta,.small{font-size:11px;color:var(--mut)}.pill{font-size:10px;border:1px solid #4a5060;border-radius:99px;padding:4px 7px;height:max-content}
+.vals{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-top:10px}.val{background:#0c0f15;border-radius:9px;padding:7px}.lab{font-size:9px;color:var(--mut)}.money{font-size:15px;font-weight:800}.na{color:#666}.actions{display:flex;gap:6px;margin-top:9px}.actions button{flex:1;padding:9px}.gold{color:var(--gold)}
+.stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.stat{background:var(--p);border:1px solid var(--line);border-radius:14px;padding:13px}.stat b{font-size:23px;display:block}
+nav{position:fixed;z-index:5;bottom:0;left:0;right:0;background:#10131af8;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);height:70px;padding-bottom:env(safe-area-inset-bottom)}nav button{border:0;background:transparent;border-radius:0;font-size:10px;color:#aaa;padding:6px 1px}nav button.on{color:var(--gold)}.ico{display:block;font-size:20px}
+.modal{display:none;position:fixed;z-index:10;inset:0;background:#000b;padding:18px;overflow:auto}.modal.on{display:block}.sheet{max-width:650px;margin:5vh auto;background:#11151d;border:1px solid var(--line);border-radius:17px;padding:15px}.x{float:right}.warn{padding:10px;border:1px solid #51481e;border-radius:10px;background:#18160d;font-size:12px;color:#d7c77a}.check{display:flex;gap:8px;align-items:center}.check input{width:auto}
+</style></head><body><header><h1>SW Card Vault <span class="small">v3</span></h1><div class="small">902 original-trilogy base cards</div></header><main>
+<section id="search" class="page on"><input id="q" placeholder="Search Luke, Vader, Boba, #57…"><div class="row"><select id="setFilter"><option value="">All sets</option><option value="sw1977">1977 Star Wars</option><option value="esb1980">1980 Empire</option><option value="rotj1983">1983 Jedi</option></select><select id="sort"><option value="num">Card #</option><option value="psa9">PSA 9 value</option><option value="upside">Grading upside</option></select></div><div id="count" class="small"></div><div id="results"></div></section>
+<section id="collection" class="page"><h2>My Collection</h2><div id="stats" class="stats"></div><div id="ownedList"></div></section>
+<section id="grading" class="page"><h2>Grading Candidates</h2><div class="warn">Ranks cards with verified market values by PSA 9 ÷ raw value. This is not a prediction of grade.</div><div id="gradeList"></div></section>
+<section id="deal" class="page"><h2>Deal Checker</h2><div class="card"><select id="dealCard" style="width:100%"></select><div class="row"><input id="ask" type="number" inputmode="decimal" placeholder="Seller asking $"><select id="dealGrade"><option value="raw">Raw</option><option value="psa7">PSA 7</option><option value="psa8">PSA 8</option><option value="psa9">PSA 9</option><option value="psa10">PSA 10</option></select></div><div id="dealOut"></div></div></section>
+<section id="more" class="page"><h2>Tools</h2><div class="card"><button onclick="exportData()">Export collection backup</button> <button onclick="document.querySelector('#importFile').click()">Import backup</button><input hidden id="importFile" type="file" accept=".json"></div><div class="card"><b>Database status</b><p class="small">All 902 base-card slots are loaded. Verified checklist titles are being filled from published checklists. Market values display only where researched; missing prices show “—” rather than invented numbers.</p></div></section>
 </main>
-<nav><button class="active" data-page="searchPage"><span class="ico">⌕</span>Search</button><button data-page="collectionPage"><span class="ico">★</span>Collection</button><button data-page="dealPage"><span class="ico">$</span>Deal</button><button data-page="aboutPage"><span class="ico">ⓘ</span>About</button></nav>
+<nav><button class="on" data-p="search"><span class="ico">⌕</span>Search</button><button data-p="collection"><span class="ico">★</span>Collection</button><button data-p="grading"><span class="ico">↗</span>Grade</button><button data-p="deal"><span class="ico">$</span>Deal</button><button data-p="more"><span class="ico">☰</span>More</button></nav>
+<div id="modal" class="modal"><div class="sheet"><button class="x" onclick="closeModal()">✕</button><div id="modalBody"></div></div></div>
 <script>
-let DATA=[],owned=JSON.parse(localStorage.getItem('swOwned')||'{}');
-const $=s=>document.querySelector(s), money=n=>'$'+Number(n||0).toLocaleString();
-async function boot(){DATA=await (await fetch('cards.json')).json(); populateDeal(); render(); renderCollection(); deal()}
-function cardHTML(c){let o=owned[c.number];return `<div class="card ${o?'owned':''}"><div class="top"><div><div class="num">#${c.number}</div><div class="name">${c.name}</div><div class="meta">${c.year} · Series ${c.series} · ${c.border} border</div></div><div class="pill">${o?'OWNED':'TOPPS'}</div></div><div class="values">
-<div class="val"><div class="lab">RAW</div><div class="money">${money(c.raw)}</div></div><div class="val"><div class="lab">PSA 7</div><div class="money">${money(c.psa7)}</div></div><div class="val"><div class="lab">PSA 8</div><div class="money">${money(c.psa8)}</div></div><div class="val"><div class="lab">PSA 9</div><div class="money">${money(c.psa9)}</div></div><div class="val"><div class="lab">PSA 10</div><div class="money">${money(c.psa10)}</div></div></div><div class="actions"><button onclick="toggle(${c.number})">${o?'Remove':'Add to collection'}</button></div></div>`}
-function render(){let q=$('#q').value.toLowerCase().trim(),s=$('#series').value,sort=$('#sort').value;let a=DATA.filter(c=>(!s||String(c.series)==s)&&(!q||String(c.number).includes(q)||c.name.toLowerCase().includes(q)));a.sort((x,y)=>sort==='number'?x.number-y.number:y[sort]-x[sort]);$('#count').textContent=a.length+' cards shown';$('#cards').innerHTML=a.map(cardHTML).join('')}
-function toggle(n){if(owned[n])delete owned[n];else owned[n]={added:Date.now()};localStorage.setItem('swOwned',JSON.stringify(owned));render();renderCollection()}
-function renderCollection(){let a=DATA.filter(c=>owned[c.number]);let raw=a.reduce((s,c)=>s+c.raw,0);$('#collectionStats').innerHTML=`<div class="stat"><span class="small">Cards</span><strong>${a.length}</strong></div><div class="stat"><span class="small">Raw value</span><strong>${money(raw)}</strong></div>`;$('#ownedCards').innerHTML=a.length?a.map(cardHTML).join(''):'<div class="notice">Cards you add will appear here and stay saved on this phone.</div>'}
-function populateDeal(){$('#dealCard').innerHTML=DATA.map(c=>`<option value="${c.number}">#${c.number} ${c.name}</option>`).join('')}
-function deal(){if(!DATA.length)return;let c=DATA.find(x=>x.number==$('#dealCard').value)||DATA[0],ask=Number($('#ask').value||0);$('#dealResult').innerHTML=`<div class="values"><div class="val"><div class="lab">ASK</div><div class="money">${money(ask)}</div></div><div class="val"><div class="lab">RAW</div><div class="money">${money(c.raw)}</div></div><div class="val"><div class="lab">PSA 9</div><div class="money">${money(c.psa9)}</div></div></div>`}
-$('#q').addEventListener('input',render);$('#series').addEventListener('change',render);$('#sort').addEventListener('change',render);$('#ask').addEventListener('input',deal);$('#dealCard').addEventListener('change',deal);
-document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.remove('active'));document.querySelectorAll('.page').forEach(x=>x.classList.remove('active'));b.classList.add('active');$('#'+b.dataset.page).classList.add('active');if(b.dataset.page==='collectionPage')renderCollection()});
-if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js');boot();
+let D=[], C=JSON.parse(localStorage.getItem('swcv3')||'{}');const $=s=>document.querySelector(s);const money=n=>n==null?'—':'$'+Number(n).toLocaleString();
+async function boot(){D=await (await fetch('cards.json')).json(); fillDeal(); render(); coll(); grades(); deal()}
+function vals(c){return `<div class="vals">${['raw','psa7','psa8','psa9','psa10'].map(k=>`<div class="val"><div class="lab">${k.toUpperCase()}</div><div class="money ${c[k]==null?'na':''}">${money(c[k])}</div></div>`).join('')}</div>`}
+function card(c){let o=C[c.id];return `<div class="card ${o?.owned?'owned':''}" onclick="openCard('${c.id}')"><div class="top"><div><div class="num">#${c.number} <span class="small">${c.year}</span></div><div class="name">${c.name}</div><div class="meta">${c.set} · Series ${c.series}${c.border?' · '+c.border:''}${!c.titleVerified?' · title pending':''}</div></div><span class="pill">${o?.owned?'OWNED':o?.wish?'WISH':'TOPPS'}</span></div>${vals(c)}</div>`}
+function filtered(){let q=$('#q').value.toLowerCase().trim(),sf=$('#setFilter').value;let a=D.filter(c=>(!sf||c.setId==sf)&&(!q||('#'+c.number).includes(q)||String(c.number)==q||c.name.toLowerCase().includes(q)||c.set.toLowerCase().includes(q)));let s=$('#sort').value;if(s==='num')a.sort((x,y)=>x.year-y.year||x.number-y.number);if(s==='psa9')a.sort((x,y)=>(y.psa9??-1)-(x.psa9??-1));if(s==='upside')a.sort((x,y)=>((y.psa9&&y.raw)?y.psa9/y.raw:-1)-((x.psa9&&x.raw)?x.psa9/x.raw:-1));return a}
+function render(){let a=filtered();$('#count').textContent=`${a.length} cards`;$('#results').innerHTML=a.slice(0,150).map(card).join('')+(a.length>150?'<div class="small">Showing first 150. Narrow your search to see more.</div>':'')}
+function openCard(id){let c=D.find(x=>x.id==id),o=C[id]||{};$('#modalBody').innerHTML=`<h2>#${c.number} ${c.name}</h2><div class="small">${c.year} ${c.set} · Series ${c.series}</div>${vals(c)}<p class="small">Values updated: ${c.valueUpdated||'not yet researched'}</p><hr><label class="check"><input id="own" type="checkbox" ${o.owned?'checked':''}> I own this card</label><label class="check"><input id="wish" type="checkbox" ${o.wish?'checked':''}> Wishlist</label><div class="row"><select id="myGrade"><option>Raw</option>${[1,2,3,4,5,6,7,8,9,10].map(n=>`<option ${o.grade==n?'selected':''}>${n}</option>`).join('')}</select><input id="paid" type="number" inputmode="decimal" placeholder="Price paid" value="${o.paid??''}"></div><input id="qty" type="number" inputmode="numeric" min="1" placeholder="Quantity" value="${o.qty??1}"><textarea id="notes" placeholder="Notes">${o.notes??''}</textarea><button onclick="saveCard('${id}')">Save card</button>`;$('#modal').classList.add('on')}
+function closeModal(){$('#modal').classList.remove('on')}
+function saveCard(id){C[id]={owned:$('#own').checked,wish:$('#wish').checked,grade:$('#myGrade').value,paid:Number($('#paid').value)||0,qty:Number($('#qty').value)||1,notes:$('#notes').value};localStorage.setItem('swcv3',JSON.stringify(C));closeModal();render();coll();grades()}
+function coll(){let a=D.filter(c=>C[c.id]?.owned),paid=a.reduce((s,c)=>s+(C[c.id].paid||0)*(C[c.id].qty||1),0),raw=a.reduce((s,c)=>s+(c.raw||0)*(C[c.id].qty||1),0),qty=a.reduce((s,c)=>s+(C[c.id].qty||1),0);$('#stats').innerHTML=`<div class="stat"><span class="small">Cards</span><b>${qty}</b></div><div class="stat"><span class="small">Paid</span><b>${money(paid)}</b></div><div class="stat"><span class="small">Known raw value</span><b>${money(raw)}</b></div><div class="stat"><span class="small">Sets represented</span><b>${new Set(a.map(x=>x.setId)).size}</b></div>`;$('#ownedList').innerHTML=a.map(card).join('')||'<p class="small">No cards added yet.</p>'}
+function grades(){let a=D.filter(c=>c.raw&&c.psa9).sort((x,y)=>y.psa9/y.raw-x.psa9/x.raw);$('#gradeList').innerHTML=a.map(c=>card(c)+`<div class="small" style="margin:-5px 12px 10px">PSA 9 / raw: <b class="gold">${(c.psa9/c.raw).toFixed(1)}×</b></div>`).join('')}
+function fillDeal(){$('#dealCard').innerHTML=D.filter(c=>c.raw!=null).map(c=>`<option value="${c.id}">${c.year} #${c.number} ${c.name}</option>`).join('')}
+function deal(){if(!D.length)return;let c=D.find(x=>x.id==$('#dealCard').value)||D.find(x=>x.raw!=null),g=$('#dealGrade').value,a=Number($('#ask').value)||0,v=c[g];$('#dealOut').innerHTML=`${vals(c)}<p>Selected market: <b>${money(v)}</b> · Ask: <b>${money(a)}</b></p>${v!=null&&a?`<p class="${a<=v?'gold':''}">Difference: ${money(v-a)}</p>`:''}<div class="small">Compare price only; condition and grading risk still matter.</div>`}
+function exportData(){let blob=new Blob([JSON.stringify({version:3,exported:new Date().toISOString(),collection:C},null,2)],{type:'application/json'}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='sw-card-vault-backup.json';a.click();URL.revokeObjectURL(u)}
+$('#importFile').onchange=e=>{let r=new FileReader();r.onload=()=>{try{let j=JSON.parse(r.result);C=j.collection||j;localStorage.setItem('swcv3',JSON.stringify(C));coll();render();alert('Backup imported')}catch{alert('Could not read backup')}};r.readAsText(e.target.files[0])}
+['q','setFilter','sort'].forEach(id=>$('#'+id).addEventListener(id==='q'?'input':'change',render));['dealCard','dealGrade'].forEach(id=>$('#'+id).addEventListener('change',deal));$('#ask').addEventListener('input',deal);
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button,.page').forEach(x=>x.classList.remove('on'));b.classList.add('on');$('#'+b.dataset.p).classList.add('on');if(b.dataset.p==='collection')coll();if(b.dataset.p==='grading')grades()});
+if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js');boot();
 </script></body></html>

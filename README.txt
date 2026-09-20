@@ -1,18 +1,12 @@
-SW CARD VAULT v2
+SW CARD VAULT v3
+Upload these files to the ROOT of the existing GitHub repository, replacing files with the same names.
+GitHub Pages URL remains the same.
 
-ANDROID INSTALL
-1. Host this folder on an HTTPS static host such as GitHub Pages.
-2. Open the HTTPS address in Chrome on Android.
-3. Tap Chrome menu > Add to Home screen / Install app.
-4. Launch Card Vault from the new home-screen icon.
+IMPORTANT DATA NOTE:
+The app contains all 902 numbered base-card slots:
+1977 Topps Star Wars 330
+1980 Topps Empire Strikes Back 352
+1983 Topps Return of the Jedi 220
 
-Included:
-- Android installable PWA manifest
-- Offline caching/service worker
-- Phone-size responsive interface
-- Search/filter/sort
-- Raw + PSA 7/8/9/10 display
-- Collection saved locally on the phone
-- Basic deal checker
-
-NOTE: The included card database is still a starter dataset. Values are estimates and should be refreshed against recent sold comps.
+Checklist titles are populated where verified from published checklists. Remaining titles say 'title pending verification'.
+Market values are intentionally blank unless researched; the app never fabricates missing prices.
