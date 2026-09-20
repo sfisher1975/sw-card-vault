@@ -1,11 +1,16 @@
-SW Card Vault v15 database snapshot
-Date: 2026-09-20
-Total cards: 902
-Cards with any stored price: 248
-Raw: 245
-PSA 7: 29
-PSA 8: 30
-PSA 9: 165
+SW Card Vault v16 FIX
+2026-09-20
 
-This pass refreshes current public PriceCharting checklist data and preserves individually
-verified full-grade records. Missing grades remain blank; PSA 10 is not stored.
+IMPORTANT:
+v15 used some inconsistent/stale checklist values. v16 removes that bad overwrite for
+1977 #1-58 and directly refreshes the key records below from individual PriceCharting pages.
+
+Directly verified current full Raw / Grade 7 / Grade 8 / Grade 9:
+1977 #1-8
+1980 Empire #2
+1983 Jedi #2
+
+The app now explicitly labels the four displayed figures "Current PriceCharting Value".
+PSA 10 is not tracked.
+
+Do not use v15.
