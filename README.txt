@@ -1,15 +1,13 @@
-SW Card Vault v6 — Card #1 cache fix
+SW Card Vault v7 — Pricing build
 
-Upload ALL files in this ZIP to the ROOT of the existing GitHub repository.
+Upload ALL files to the ROOT of the existing GitHub repo and replace index.html + sw.js.
+New data file: cards-v7.json
 
-IMPORTANT:
-- v6 uses cards-v6.json, not cards.json.
-- This intentionally gives the browser a brand-new data URL so an old cards.json cache cannot be reused.
-- You can leave the old cards.json in GitHub; v6 does not request it.
+Changes:
+- Whole-dollar display (no cents).
+- Fresh PriceCharting market values loaded for 1977 Topps #1 through #8:
+  Raw, Grade 7, Grade 8, Grade 9, PSA 10.
+- New versioned data file avoids stale cache.
+- Other cards remain in the 902-card database; unverified/missing values remain blank rather than guessed.
 
-Expected #1 Luke Skywalker display:
-Raw $199.48
-PSA 7 $2,083.81
-PSA 8 $5,063.19
-PSA 9 $9,335.45
-PSA 10 $135,416.50
+Price data checked 2026-09-20.
