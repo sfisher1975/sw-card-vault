@@ -11,7 +11,16 @@ input,select,textarea,button{font:inherit;color:#fff;background:#171b24;border:1
 .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}.stat{background:var(--p);border:1px solid var(--line);border-radius:14px;padding:13px}.stat b{font-size:23px;display:block}
 nav{position:fixed;z-index:5;bottom:0;left:0;right:0;background:#10131af8;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(5,1fr);height:70px;padding-bottom:env(safe-area-inset-bottom)}nav button{border:0;background:transparent;border-radius:0;font-size:10px;color:#aaa;padding:6px 1px}nav button.on{color:var(--gold)}.ico{display:block;font-size:20px}
 .modal{display:none;position:fixed;z-index:10;inset:0;background:#000b;padding:18px;overflow:auto}.modal.on{display:block}.sheet{max-width:650px;margin:5vh auto;background:#11151d;border:1px solid var(--line);border-radius:17px;padding:15px}.x{float:right}.warn{padding:10px;border:1px solid #51481e;border-radius:10px;background:#18160d;font-size:12px;color:#d7c77a}.check{display:flex;gap:8px;align-items:center}.check input{width:auto}
-</style></head><body><header><h1>SW Card Vault <span class="small">v7</span></h1><div class="small">902 original-trilogy base cards<div class="small" style="margin-top:4px">Pricing build: verified PriceCharting data loaded for 1977 #1–8</div></div></header><main>
+
+.history-box{margin-top:16px;padding-top:14px;border-top:1px solid #27324a}
+.history-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.history-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0}
+.history-tabs button{padding:7px 10px;border-radius:8px}
+.history-tabs button.active{outline:2px solid #7aa2ff}
+.history-chart{width:100%;height:210px;background:#0b1020;border-radius:10px;display:block}
+.history-list{max-height:130px;overflow:auto;margin-top:8px;font-size:12px}
+.history-row{display:flex;justify-content:space-between;padding:4px 2px;border-bottom:1px solid #202943}
+</style></head><body><header><h1>SW Card Vault <span class="small">v8</span></h1><div class="small">902 original-trilogy base cards<div class="small" style="margin-top:4px">Pricing build: verified PriceCharting data loaded for 1977 #1–8</div></div></header><main>
 <section id="search" class="page on"><input id="q" placeholder="Search Luke, Vader, Boba, #57…"><div class="row"><select id="setFilter"><option value="">All sets</option><option value="sw1977">1977 Star Wars</option><option value="esb1980">1980 Empire</option><option value="rotj1983">1983 Jedi</option></select><select id="sort"><option value="num">Card #</option><option value="psa9">PSA 9 value</option><option value="upside">Grading upside</option></select></div><div id="count" class="small"></div><div id="results"></div></section>
 <section id="collection" class="page"><h2>My Collection</h2><div id="stats" class="stats"></div><div id="ownedList"></div></section>
 <section id="grading" class="page"><h2>Grading Candidates</h2><div class="warn">Ranks cards with verified market values by PSA 9 ÷ raw value. This is not a prediction of grade.</div><div id="gradeList"></div></section>
@@ -22,7 +31,7 @@ nav{position:fixed;z-index:5;bottom:0;left:0;right:0;background:#10131af8;border
 <div id="modal" class="modal"><div class="sheet"><button class="x" onclick="closeModal()">✕</button><div id="modalBody"></div></div></div>
 <script>
 let D=[], C=JSON.parse(localStorage.getItem('swcv3')||'{}');const $=s=>document.querySelector(s);const money=n=>n==null?'—':'$'+Math.round(Number(n)).toLocaleString();
-async function boot(){D=await (await fetch('cards-v7.json?build=7',{cache:'no-store'})).json(); fillDeal(); render(); coll(); grades(); deal()}
+async function boot(){D=await (await fetch('cards-v8.json?build=8',{cache:'no-store'})).json(); fillDeal(); render(); coll(); grades(); deal()}
 function vals(c){return `<div class="vals">${['raw','psa7','psa8','psa9','psa10'].map(k=>`<div class="val"><div class="lab">${k.toUpperCase()}</div><div class="money ${c[k]==null?'na':''}">${money(c[k])}</div></div>`).join('')}</div>`}
 function card(c){let o=C[c.id];return `<div class="card ${o?.owned?'owned':''}" onclick="openCard('${c.id}')"><div class="top"><div><div class="num">#${c.number} <span class="small">${c.year}</span></div><div class="name">${c.name}</div><div class="meta">${c.set} · Series ${c.series}${c.border?' · '+c.border:''}${!c.titleVerified?' · title pending':''}</div></div><span class="pill">${o?.owned?'OWNED':o?.wish?'WISH':'TOPPS'}</span></div>${vals(c)}</div>`}
 function filtered(){let q=$('#q').value.toLowerCase().trim(),sf=$('#setFilter').value;let a=D.filter(c=>(!sf||c.setId==sf)&&(!q||('#'+c.number).includes(q)||String(c.number)==q||c.name.toLowerCase().includes(q)||c.set.toLowerCase().includes(q)));let s=$('#sort').value;if(s==='num')a.sort((x,y)=>x.year-y.year||x.number-y.number);if(s==='psa9')a.sort((x,y)=>(y.psa9??-1)-(x.psa9??-1));if(s==='upside')a.sort((x,y)=>((y.psa9&&y.raw)?y.psa9/y.raw:-1)-((x.psa9&&x.raw)?x.psa9/x.raw:-1));return a}
@@ -39,4 +48,81 @@ $('#importFile').onchange=e=>{let r=new FileReader();r.onload=()=>{try{let j=JSO
 ['q','setFilter','sort'].forEach(id=>$('#'+id).addEventListener(id==='q'?'input':'change',render));['dealCard','dealGrade'].forEach(id=>$('#'+id).addEventListener('change',deal));$('#ask').addEventListener('input',deal);
 document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button,.page').forEach(x=>x.classList.remove('on'));b.classList.add('on');$('#'+b.dataset.p).classList.add('on');if(b.dataset.p==='collection')coll();if(b.dataset.p==='grading')grades()});
 if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js');boot();
+
+// v8 lightweight price-history chart. History loads only when a card is opened.
+let historyGrade='raw';
+function historySalesFor(c,grade){
+  // First real-history test: 1977 #1. These are dated completed sales surfaced by PriceCharting.
+  if(c.setId==='sw1977' && Number(c.number)===1){
+    const H={
+      raw:[
+        ['2026-09-05',175],['2026-09-05',200],['2026-09-05',233],
+        ['2026-09-06',128],['2026-09-06',165],['2026-09-06',220],['2026-09-06',255],['2026-09-06',280],['2026-09-06',340],
+        ['2026-09-07',178],['2026-09-07',200],['2026-09-07',210],['2026-09-07',280],['2026-09-07',338],['2026-09-07',385],
+        ['2026-09-08',175],['2026-09-08',200],['2026-09-09',219]
+      ],
+      psa7:[['2026-08-23',2119],['2026-09-02',2600]],
+      psa8:[['2026-05-26',4500],['2026-05-31',3900],['2026-07-02',4084],['2026-07-31',4500],['2026-08-15',6000]],
+      psa9:[],
+      psa10:[]
+    };
+    return H[grade]||[];
+  }
+  return [];
+}
+function drawHistory(c,grade){
+  historyGrade=grade;
+  document.querySelectorAll('.history-tabs button').forEach(b=>b.classList.toggle('active',b.dataset.g===grade));
+  const cv=document.getElementById('historyCanvas'), list=document.getElementById('historyList'), msg=document.getElementById('historyMsg');
+  if(!cv)return;
+  const pts=historySalesFor(c,grade);
+  const ctx=cv.getContext('2d'), dpr=window.devicePixelRatio||1;
+  const W=Math.max(280,cv.clientWidth), H=210;
+  cv.width=W*dpr; cv.height=H*dpr; ctx.setTransform(dpr,0,0,dpr,0,0);
+  ctx.clearRect(0,0,W,H);
+  ctx.strokeStyle='#26324d';ctx.lineWidth=1;
+  for(let i=0;i<4;i++){let y=20+i*50;ctx.beginPath();ctx.moveTo(42,y);ctx.lineTo(W-12,y);ctx.stroke();}
+  if(!pts.length){
+    msg.textContent='No dated sales loaded for this grade yet.';
+    list.innerHTML='';
+    ctx.fillStyle='#9ba8c7';ctx.font='13px system-ui';ctx.fillText('No history loaded',Math.max(70,W/2-55),108);return;
+  }
+  msg.textContent=pts.length+' dated completed sales loaded';
+  const vals=pts.map(x=>x[1]), min=Math.min(...vals), max=Math.max(...vals), span=Math.max(1,max-min);
+  const X=i=>42+(W-56)*(pts.length===1?.5:i/(pts.length-1));
+  const Y=v=>180-(v-min)/span*145;
+  ctx.strokeStyle='#7aa2ff';ctx.lineWidth=2;ctx.beginPath();
+  pts.forEach((x,i)=>{const xx=X(i),yy=Y(x[1]);i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy)});ctx.stroke();
+  ctx.fillStyle='#dbe5ff';pts.forEach((x,i)=>{ctx.beginPath();ctx.arc(X(i),Y(x[1]),3,0,Math.PI*2);ctx.fill()});
+  ctx.fillStyle='#9ba8c7';ctx.font='11px system-ui';ctx.fillText('$'+Math.round(max).toLocaleString(),2,18);ctx.fillText('$'+Math.round(min).toLocaleString(),2,184);
+  list.innerHTML=pts.slice().reverse().map(x=>'<div class="history-row"><span>'+x[0]+'</span><strong>$'+Math.round(x[1]).toLocaleString()+'</strong></div>').join('');
+}
+function addHistoryPanel(c){
+  const host=document.querySelector('.modal .card,.modal-content,.sheet,.dialog-card')||document.querySelector('[role="dialog"]');
+  if(!host || document.getElementById('historyPanel'))return;
+  const box=document.createElement('div');box.id='historyPanel';box.className='history-box';
+  box.innerHTML='<div class="history-head"><strong>Price History</strong><span class="small">Completed sales</span></div>'+
+  '<div class="history-tabs">'+
+  ['raw','psa7','psa8','psa9','psa10'].map(g=>'<button type="button" data-g="'+g+'">'+(g==='raw'?'Raw':g.toUpperCase().replace('PSA','PSA '))+'</button>').join('')+
+  '</div><canvas id="historyCanvas" class="history-chart"></canvas><div id="historyMsg" class="small" style="margin-top:7px"></div><div id="historyList" class="history-list"></div>'+
+  (c.priceUrl?'<p class="small" style="margin-top:8px">Source: PriceCharting</p>':'');
+  host.appendChild(box);
+  box.querySelectorAll('button').forEach(b=>b.onclick=()=>drawHistory(c,b.dataset.g));
+  setTimeout(()=>drawHistory(c,'raw'),0);
+}
+// Observe card modal openings and attach history without changing the existing modal code.
+const histObs=new MutationObserver(()=>{
+  const modal=document.querySelector('.modal:not([style*="display: none"]),[role="dialog"]');
+  if(!modal || document.getElementById('historyPanel'))return;
+  const title=(modal.innerText||'');
+  const m=title.match(/#(\d+)/);
+  if(!m)return;
+  const n=Number(m[1]);
+  const setText=title.toLowerCase();
+  let sid=setText.includes('empire')?'esb1980':setText.includes('jedi')?'rotj1983':'sw1977';
+  const c=(window.D||D||[]).find(x=>x.setId===sid&&Number(x.number)===n);
+  if(c)addHistoryPanel(c);
+});
+histObs.observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['style','class']});
+
 </script></body></html>
