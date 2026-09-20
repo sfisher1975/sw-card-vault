@@ -1,17 +1,16 @@
-SW Card Vault v13 data audit
-Total card records: 902
+SW Card Vault v14 initial database snapshot
+Snapshot date: 2026-09-20
+Total card slots: 902
 1977: 330
 1980 Empire: 352
 1983 Jedi: 220
 
-Records with any stored price: 72
-Raw stored: 72
-PSA 7 stored: 23
-PSA 8 stored: 24
-PSA 9 stored: 68
-Titles still marked pending verification: 549
+Records with any price: 209
+Raw values: 206
+PSA 7 values: 28
+PSA 8 values: 29
+PSA 9 values: 136
+Titles marked verified: 443
 
-Architecture change:
-cards-v13.json = card/checklist metadata
-prices-v13.json = replaceable price/source/link layer
-No PSA 10 fields.
+Price source: public PriceCharting pages. Missing values are intentionally blank.
+No PSA 10 data is stored.
