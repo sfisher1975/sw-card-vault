@@ -1,3 +1,5 @@
-SW Card Vault v19
-Based on v18 one-button update build.
-902-card catalog; on-demand Raw/Grade 7/Grade 8/Grade 9 pricing; PSA 10 excluded.
+SW Card Vault v1.0
+Release build
+902-card original-trilogy catalog
+On-demand PriceCharting updates: Raw, Grade 7, Grade 8, Grade 9
+Price updater reads the Full Price Guide section of each individual card page.

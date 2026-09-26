@@ -1,16 +1,19 @@
-SW Card Vault v17 — DATA LOAD FIX
+SW CARD VAULT v1.0
 
-The screenshot from v16 showed all prices as dashes.
+Release contents:
+- index.html — main app
+- cards-v1.0.json — fixed 902-card catalog
+- prices-v1.0.json — starting/local price records and exact card links
+- price-worker.js — Cloudflare Worker used by Update Prices
+- sw.js — offline/PWA cache
+- manifest.webmanifest + icons — installable web app files
+- PRICE-UPDATER-SETUP.txt — updater setup notes
 
-Cause:
-v16 loaded cards-v16.json only. Pricing had been moved into prices-v16.json,
-but the app's boot function never loaded/merged that second file.
+DEPLOYMENT
+Upload all files in this release folder to the root of the GitHub Pages repository.
+The service worker uses a new v1.0 cache name, so the release will replace older cached app files after reload.
 
-v17 fixes this:
-- loads cards-v17.json
-- loads prices-v17.json
-- merges Raw / PSA 7 / PSA 8 / PSA 9 before rendering
-- new cache version forces a clean update
-- your local collection storage remains unchanged
-
-Upload ALL v17 files to the repository root.
+PRICING
+The app updates one selected card at a time from its individual PriceCharting page.
+Tracked values are Raw, Grade 7, Grade 8, and Grade 9.
+Missing values remain blank rather than being invented.

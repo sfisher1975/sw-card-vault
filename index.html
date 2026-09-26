@@ -26,12 +26,10 @@ nav{position:fixed;z-index:5;bottom:0;left:0;right:0;background:#10131af8;border
 input[name="paid"],input[name="pricePaid"],textarea[name="notes"],
 label[for="paid"],label[for="pricePaid"],label[for="notes"]{display:none!important}
 
-[data-grade="psa10"],[data-g="psa10"],.psa10,#psa10{display:none!important}
-
 .pc-link{display:block;margin:14px 0 4px;padding:12px 14px;border-radius:10px;text-align:center;
 font-weight:800;text-decoration:none;background:#263b5e;color:#fff;border:1px solid #46628d}
 .pc-link:active{transform:scale(.99)}
-</style></head><body><header><h1>SW Card Vault <span class="small">v19</span></h1><div class="small">902 original-trilogy base cards<div class="small" style="margin-top:4px">On-demand PriceCharting updates · PSA 9 ceiling</div><div class="small" style="margin-top:4px">Select a card and tap Update Prices to refresh that card</div></div></header><main>
+</style></head><body><header><h1>SW Card Vault <span class="small">v1.0</span></h1><div class="small">902 original-trilogy base cards<div class="small" style="margin-top:4px">On-demand PriceCharting updates · PSA 9 ceiling</div><div class="small" style="margin-top:4px">Select a card and tap Update Prices to refresh that card</div></div></header><main>
 <section id="search" class="page on"><input id="q" placeholder="Search Luke, Vader, Boba, #57…"><div class="row"><select id="setFilter"><option value="">All sets</option><option value="sw1977">1977 Star Wars</option><option value="esb1980">1980 Empire</option><option value="rotj1983">1983 Jedi</option></select><select id="sort"><option value="num">Card #</option><option value="psa9">PSA 9 value</option><option value="upside">Grading upside</option></select></div><div id="count" class="small"></div><div id="results"></div></section>
 <section id="collection" class="page"><h2>My Collection</h2><div id="stats" class="stats"></div><div id="ownedList"></div></section>
 <section id="grading" class="page"><h2>Grading Candidates</h2><div class="warn">Ranks cards with verified market values by PSA 9 ÷ raw value. This is not a prediction of grade.</div><div id="gradeList"></div></section>
@@ -44,8 +42,8 @@ font-weight:800;text-decoration:none;background:#263b5e;color:#fff;border:1px so
 let D=[], C=JSON.parse(localStorage.getItem('swcv3')||'{}');const $=s=>document.querySelector(s);const money=n=>n==null?'—':'$'+Math.round(Number(n)).toLocaleString();
 async function boot(){
   const [cards,prices]=await Promise.all([
-    fetch('cards-v17.json?build=17',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('cards '+r.status);return r.json()}),
-    fetch('prices-v17.json?build=17',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('prices '+r.status);return r.json()})
+    fetch('cards-v1.0.json?build=1.0',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('cards '+r.status);return r.json()}),
+    fetch('prices-v1.0.json?build=1.0',{cache:'no-store'}).then(r=>{if(!r.ok)throw new Error('prices '+r.status);return r.json()})
   ]);
   D=cards.map(c=>{
     const p=prices[c.id]||{};

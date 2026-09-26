@@ -1,28 +1,81 @@
-// Cloudflare Worker for SW Card Vault v19.
-// Deploy this file as a Worker, then paste its workers.dev URL into Tools in the app.
-const ALLOWED_HOST = 'www.pricecharting.com';
-function cors(headers={}) { return {'Access-Control-Allow-Origin':'*','Access-Control-Allow-Methods':'GET,OPTIONS','Access-Control-Allow-Headers':'Content-Type',...headers}; }
-function dollars(s){ if(!s) return null; const n=Number(String(s).replace(/[^0-9.]/g,'')); return Number.isFinite(n)?n:null; }
 export default {
- async fetch(request){
-  if(request.method==='OPTIONS') return new Response(null,{headers:cors()});
-  try{
-   const req=new URL(request.url), target=req.searchParams.get('url');
-   if(!target) return Response.json({error:'Missing url'},{status:400,headers:cors()});
-   const u=new URL(target);
-   if(u.protocol!=='https:' || u.hostname!==ALLOWED_HOST || !u.pathname.startsWith('/game/')) return Response.json({error:'Only PriceCharting game pages are allowed'},{status:400,headers:cors()});
-   const r=await fetch(u.toString(),{headers:{'User-Agent':'Mozilla/5.0 (compatible; SWCardVault/18; +personal collection price lookup)','Accept':'text/html'}});
-   if(!r.ok) return Response.json({error:'PriceCharting returned '+r.status},{status:502,headers:cors()});
-   const html=await r.text();
-   // PriceCharting exposes current prices in the main price table. Capture only the first four columns:
-   // Ungraded, Grade 7, Grade 8, Grade 9. PSA 10 is intentionally ignored.
-   const text=html.replace(/<script[\\s\\S]*?<\\/script>/gi,' ').replace(/<style[\\s\\S]*?<\\/style>/gi,' ').replace(/<[^>]+>/g,' ').replace(/&nbsp;|&#160;/g,' ').replace(/&amp;/g,'&').replace(/\\s+/g,' ');
-   const marker=text.search(/Ungraded\\s*Grade 7\\s*Grade 8\\s*Grade 9/i);
-   if(marker<0) return Response.json({error:'Could not find the PriceCharting grade table'},{status:502,headers:cors()});
-   const chunk=text.slice(marker,marker+1500);
-   const vals=[...chunk.matchAll(/\\$[0-9][0-9,]*(?:\\.[0-9]{1,2})?/g)].slice(0,4).map(m=>dollars(m[0]));
-   if(vals.length<4) return Response.json({error:'Could not read all four requested price columns'},{status:502,headers:cors()});
-   return Response.json({raw:vals[0],psa7:vals[1],psa8:vals[2],psa9:vals[3],updated:new Date().toISOString().slice(0,10),url:u.toString()},{headers:cors({'Cache-Control':'no-store'})});
-  }catch(e){return Response.json({error:e.message||'Lookup failed'},{status:500,headers:cors()});}
- }
+  async fetch(request) {
+    const cors = {
+      "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, OPTIONS",
+      "Access-Control-Allow-Headers": "Content-Type"
+    };
+
+    if (request.method === "OPTIONS") return new Response(null, { headers: cors });
+
+    try {
+      const req = new URL(request.url);
+      const cardUrl = req.searchParams.get("url");
+      if (!cardUrl) return send({ error: "Missing PriceCharting URL" }, 400, cors);
+
+      const target = new URL(cardUrl);
+      if (target.hostname !== "www.pricecharting.com" && target.hostname !== "pricecharting.com") {
+        return send({ error: "Invalid PriceCharting URL" }, 400, cors);
+      }
+
+      const pc = await fetch(target.toString(), {
+        headers: {
+          "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142 Safari/537.36",
+          "Accept": "text/html,application/xhtml+xml",
+          "Accept-Language": "en-US,en;q=0.9"
+        }
+      });
+
+      if (!pc.ok) return send({ error: `PriceCharting returned HTTP ${pc.status}` }, 502, cors);
+
+      const html = await pc.text();
+      const text = html
+        .replace(/&nbsp;/gi, " ")
+        .replace(/&#36;/gi, "$")
+        .replace(/&dollar;/gi, "$")
+        .replace(/&comma;/gi, ",")
+        .replace(/&amp;/gi, "&")
+        .replace(/<script[\s\S]*?<\/script>/gi, " ")
+        .replace(/<style[\s\S]*?<\/style>/gi, " ")
+        .replace(/<[^>]+>/g, " ")
+        .replace(/\s+/g, " ")
+        .trim();
+
+      const marker = text.toLowerCase().indexOf("full price guide");
+      if (marker === -1) return send({ error: "Full Price Guide not found on PriceCharting page" }, 502, cors);
+
+      const guide = text.slice(marker);
+      return send({
+        success: true,
+        raw: findGuidePrice(guide, "Ungraded"),
+        psa7: findGuidePrice(guide, "Grade 7"),
+        psa8: findGuidePrice(guide, "Grade 8"),
+        psa9: findGuidePrice(guide, "Grade 9"),
+        source: target.toString(),
+        updated: new Date().toISOString().slice(0, 10)
+      }, 200, cors);
+    } catch (e) {
+      return send({ error: e?.message || "Price lookup failed" }, 500, cors);
+    }
+  }
 };
+
+function findGuidePrice(guide, grade) {
+  let pattern;
+  if (grade === "Ungraded") pattern = /Ungraded[\s\S]{0,250}?\$\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)/i;
+  if (grade === "Grade 7") pattern = /Grade\s*7(?![\d.])[\s\S]{0,250}?\$\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)/i;
+  if (grade === "Grade 8") pattern = /Grade\s*8(?![\d.])[\s\S]{0,250}?\$\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)/i;
+  if (grade === "Grade 9") pattern = /Grade\s*9(?![\d.])[\s\S]{0,250}?\$\s*([0-9][0-9,]*(?:\.[0-9]{1,2})?)/i;
+  if (!pattern) return null;
+  const match = guide.match(pattern);
+  if (!match) return null;
+  const value = Number(match[1].replace(/,/g, ""));
+  return Number.isFinite(value) ? value : null;
+}
+
+function send(data, status, cors) {
+  return new Response(JSON.stringify(data), {
+    status,
+    headers: { ...cors, "Content-Type": "application/json; charset=utf-8", "Cache-Control": "no-store" }
+  });
+}
