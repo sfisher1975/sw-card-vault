@@ -1,0 +1,23 @@
+SW CARD VAULT v19 — ONE-BUTTON PRICE UPDATER
+
+The GitHub Pages app cannot reliably request PriceCharting pages directly because browsers enforce cross-origin rules. v19 therefore includes price-worker.js, a small Cloudflare Worker.
+
+SETUP
+1. Create a free Cloudflare account if you do not already have one.
+2. In Cloudflare, create a Worker (Workers & Pages -> Create -> Worker).
+3. Replace the starter Worker code with the contents of price-worker.js and deploy it.
+4. Copy the resulting https://...workers.dev URL.
+5. Open SW Card Vault -> Tools -> One-button Price Updater.
+6. Paste the Worker URL and tap Save updater URL.
+7. Reload the app once.
+8. Open any card and tap Update Prices.
+
+WHAT UPDATE PRICES DOES
+- Uses that card's exact PriceCharting URL already stored in prices-v17.json.
+- Reads only: Ungraded/Raw, Grade 7, Grade 8, Grade 9.
+- PSA 10 is intentionally ignored.
+- Saves refreshed values and the update date in the browser on that device.
+- A missing/failed lookup shows an error instead of inventing a value.
+
+NOTE
+PriceCharting can change its page structure or access rules. If it does, the Worker parser may need updating. Use this at a reasonable manual rate rather than bulk-scraping the entire site.
